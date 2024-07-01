@@ -24,7 +24,3 @@ def predict_api():
   predictions = rfmodel.predict(df)
   # ...
 
-
-
-if __name__=="__main__":
-  app.run(debug=True )
