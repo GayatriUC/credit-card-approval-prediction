@@ -1,26 +1,29 @@
+from flask import Flask, request, jsonify
 import pickle
-from flask import Flask,request,app,jsonify,url_for, render_template
-import numpy as np
 import pandas as pd
 
-app=Flask(__name__)
+app = Flask(__name__)
 
-#Load  the Model
-rfmodel=pickle.load(open('rfmodel.pkl','rb'))
+# Load the trained pipeline
+with open('pipeline_rf.pkl', 'rb') as f:
+    pipe_RF = pickle.load(f)
 
-@app.route('/')
-def home():
-  return render_template('home.html')
+@app.route('/predict', methods=['POST'])
+def predict():
+    # Get the data from the POST request
+    data = request.json  # Assuming the data is sent as JSON
+    new_data = pd.DataFrame(data)
+    
+    # Ensure the new data contains all the required columns
+    required_columns = pipe_RF.named_steps['encoding'].transformers_[0][2] + \
+                       list(new_data.columns[len(pipe_RF.named_steps['encoding'].transformers_[0][2]):])
+    new_data = new_data.reindex(columns=required_columns, fill_value=0)
+    
+    # Preprocess and predict
+    y_new_pred = pipe_RF.predict(new_data)
+    
+    # Return the prediction as JSON
+    return jsonify({'prediction': y_new_pred.tolist()})
 
-@app.route('/predict_api', methods=['POST'])
-def predict_api():
-  # Get data from request
-  data = request.get_json()
-  # Convert data to DataFrame
-  df = pd.DataFrame(data['features'])  # Access features array
-  # Preprocess categorical data (if necessary)
-  # ... (e.g., one-hot encoding)
-  # Make predictions
-  predictions = rfmodel.predict(df)
-  # ...
-
+if __name__ == '__main__':
+    app.run(debug=True)
