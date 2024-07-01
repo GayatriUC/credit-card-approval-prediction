@@ -5,7 +5,7 @@ import pandas as pd
 app = Flask(__name__)
 
 # Load the trained pipeline
-with open('pipeline_rf.pkl', 'rb') as f:
+with open('rfmodel.pkl', 'rb') as f:
     pipe_RF = pickle.load(f)
 
 @app.route('/predict', methods=['POST'])
