@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction App</title>
+</head>
+<body>
+    <h1>Prediction App</h1>
+    <form action="/predict" method="post">
+        <label for="Type_Income">Type of Income:</label>
+        <select id="Type_Income" name="Type_Income">
+            {% for item in Type_Income %}
+                <option value="{{ item }}">{{ item }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="Type_Occupation">Type of Occupation:</label>
+        <select id="Type_Occupation" name="Type_Occupation">
+            {% for item in Type_Occupation %}
+                <option value="{{ item }}">{{ item }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="Marital_status">Marital Status:</label>
+        <select id="Marital_status" name="Marital_status">
+            {% for item in Marital_status %}
+                <option value="{{ item }}">{{ item }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="Housing_type">Housing Type:</label>
+        <select id="Housing_type" name="Housing_type">
+            {% for item in Housing_type %}
+                <option value="{{ item }}">{{ item }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="Annual_income">Annual Income:</label>
+        <input type="number" id="Annual_income" name="Annual_income" step="0.01"><br>
+
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" step="0.01"><br>
+
+        <label for="experience">Experience:</label>
+        <input type="number" id="experience" name="experience" step="0.01"><br>
+
+        <button type="submit">Predict</button>
+    </form>
+
+    {% if prediction_text %}
+        <h2>{{ prediction_text }}</h2>
+    {% endif %}
+</body>
+</html>
